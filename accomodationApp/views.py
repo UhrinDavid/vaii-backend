@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from accomodationApp.models import ,HotelRoom,Reservation,Review
+from accomodationApp.models import HotelRoom,Reservation,Review
 from accomodationApp.serializers import HotelRoomSerializer,ReservationSerializer,ReservationSerializerBooked,ReviewSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
