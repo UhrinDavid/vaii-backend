@@ -1,6 +1,10 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from django.conf import settings
 
 
 # Create your models here.
@@ -15,9 +19,14 @@ class Reservation(models.Model):
     roomID=models.ForeignKey(HotelRoom, on_delete=models.CASCADE)
     dateFrom=models.DateField()
     dateTo=models.DateField()
-    note=models.CharField(max_length=255)
+    note=models.CharField(max_length=255,blank=True)
 
 class Review(models.Model):
     userID=models.OneToOneField(User, on_delete=models.CASCADE)
-    reviewText=models.CharField(max_length=1023)
+    reviewText=models.CharField(max_length=1023,blank=True)
     stars=models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+@receiver(post_save,sender=settings.AUTH_USER_MODEL)
+def createAuthToken(sender, instance,created,**kwargs):
+    if created:
+        Token.objects.create(user=instance)
