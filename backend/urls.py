@@ -26,4 +26,6 @@ router.register('reservations',views.ReservationViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accomodation/',include(router.urls)),
+    path('accomodation/get_user_reservations',views.get_user_reservations),
+    path('accomodation/get_reservation_dates',views.get_reservation_dates)
 ]

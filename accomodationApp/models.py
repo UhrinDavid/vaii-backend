@@ -8,7 +8,7 @@ class HotelRoom(models.Model):
     roomNumber=models.PositiveIntegerField(unique=True,validators=[MinValueValidator(1), MaxValueValidator(9999)])
     capacity=models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)])
     price=models.DecimalField(max_digits=6,decimal_places=2)
-    description=models.TextField(max_length=10000)
+    description=models.TextField(max_length=1023)
 
 class Reservation(models.Model):
     userID=models.ForeignKey(User, on_delete=models.CASCADE)
@@ -19,5 +19,5 @@ class Reservation(models.Model):
 
 class Review(models.Model):
     userID=models.OneToOneField(User, on_delete=models.CASCADE)
-    reviewText=models.CharField(max_length=1000)
+    reviewText=models.CharField(max_length=1023)
     stars=models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

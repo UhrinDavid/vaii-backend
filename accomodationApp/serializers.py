@@ -16,6 +16,11 @@ class ReservationSerializer(serializers.ModelSerializer):
         model = Reservation
         fields='__all__'
 
+class ReservationSerializerBooked(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields=['roomID','dateFrom', 'dateTo']
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review

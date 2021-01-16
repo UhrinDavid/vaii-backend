@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from accomodationApp.models import ,HotelRoom,Reservation,Review
-from accomodationApp.serializers import HotelRoomSerializer,ReservationSerializer,ReviewSerializer
+from accomodationApp.serializers import HotelRoomSerializer,ReservationSerializer,ReservationSerializerBooked,ReviewSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -22,4 +22,10 @@ class ReservationViewSet(viewsets.ModelViewSet):
 def get_user_reservations(request):
     reservations=Reservation.objects.filer(userID=request.data['userID'])
     serializer=ReservationSerializer(reservations,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_reservation_dates(request):
+    reservations=Reservation.objects.filer(roomID=request.data['roomID'])
+    serializer=ReservationSerializerBooked(reservations,many=True)
     return Response(serializer.data)
