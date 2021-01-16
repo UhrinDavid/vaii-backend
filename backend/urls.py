@@ -16,15 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accomodationApp import views
-from rest_framework.routes import DefaultRouter
+from rest_framework import routers
 
-router = DefaultRouter()
-router.register('rooms',views.HotelRoom)
-router.register('reviews',views.Review)
-router.register('reservations',views.Reservation)
-router.register('guests',views.Guest)
+router =routers.DefaultRouter()
+router.register('rooms',views.HotelRoomViewSet)
+router.register('reviews',views.ReviewViewSet)
+router.register('reservations',views.ReservationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include(router.urls)),
+    path('accomodation/',include(router.urls)),
 ]
