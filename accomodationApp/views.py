@@ -4,60 +4,52 @@ from accomodationApp.serializers import HotelRoomSerializer,ReservationSerialize
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+import jwt
+from backend.settings import SECRET_KEY
 
 # Create your views here.
 class HotelRoomViewSet(viewsets.ModelViewSet):
     queryset=HotelRoom.objects.all()
     serializer_class=HotelRoomSerializer
-    def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy','create']:
-            # which is permissions.IsAdminUser 
-            return request.user and request.user.is_staff       
-        else :
-            # which is permissions.AllowAny
-            return True
-
+    """def get_permissions(self):
+        if self.request.method in ['update', 'partial_update', 'destroy','create']:
+            self.permission_classes = [IsAdminUser, ]
+        else:
+            self.permission_classes = [AllowAny, ]"""
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset=Review.objects.all()
     serializer_class=ReviewSerializer
-    def get_permissions(self):
-        if self.action in [ 'destroy']:
-            # which is permissions.IsAdminUser 
-            return request.user and request.user.is_staff
+    """def get_permissions(self):
+        if self.action in ['destroy',]:
+            self.permission_classes = [IsAdminUser, ]
         elif self.action in ['create','update', 'partial_update']:
-            # which is permissions.IsAuthenticated
-            return request.user and is_authenticated(request.user)             
-        else :
-            # which is permissions.AllowAny
-            return True
+            self.permission_classes = [IsAuthenticated, ]
+        else:
+            self.permission_classes = [AllowAny, ]"""
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset=Reservation.objects.all()
     serializer_class=ReservationSerializer
-    def get_permissions(self):
-        if self.action in [ 'destroy','update', 'partial_update', 'list']:
-            # which is permissions.IsAdminUser 
-            return request.user and request.user.is_staff
-        elif self.action in ['create']:
-            # which is permissions.IsAuthenticated
-            return request.user and is_authenticated(request.user)             
-        else :
-            # which is permissions.AllowAny
-            return True
+    """def get_permissions(self):
+        if self.request.method in ['destroy','update', 'partial_update', 'list']:
+            self.permission_classes = [IsAdminUser, ]
+        elif self.request.method in ['create',]:
+            self.permission_classes = [IsAuthenticated, ]
+        else:
+            self.permission_classes = [AllowAny, ]"""
+            
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated, ))
-def get_user_reservations(request, user):
-    reservations=Reservation.objects.filter(userID=user)
+def get_user_reservations(request):
+    reservations=Reservation.objects.filter(userID=jwt.decode(request.headers['Authorization'][7:],SECRET_KEY, algorithms=['HS256'])['user_id'])
     serializer=ReservationSerializer(reservations,many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
 def get_reservation_dates(request,room):
     reservations=Reservation.objects.filter(roomID=room)
     serializer=ReservationSerializerBooked(reservations,many=True)

@@ -25,8 +25,3 @@ class Review(models.Model):
     userID=models.OneToOneField(User, on_delete=models.CASCADE)
     reviewText=models.CharField(max_length=1023,blank=True)
     stars=models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-
-@receiver(post_save,sender=settings.AUTH_USER_MODEL)
-def createAuthToken(sender, instance,created,**kwargs):
-    if created:
-        Token.objects.create(user=instance)

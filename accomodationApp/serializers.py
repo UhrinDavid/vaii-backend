@@ -6,6 +6,7 @@ class HotelRoomSerializer(serializers.ModelSerializer):
         model = HotelRoom
         fields='__all__'
 
+
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation

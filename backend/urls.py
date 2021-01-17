@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from accomodationApp import views
 from rest_framework import routers
-from rest_framework_simplejwt import views as jwt_views
+from rest_framework_simplejwt.views import TokenRefreshView
+from auth import views as viewsAuth
 
 router =routers.DefaultRouter()
 router.register('rooms',views.HotelRoomViewSet)
@@ -26,9 +27,10 @@ router.register('reservations',views.ReservationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token/',jwt_views.TokenObtainPairView.as_view(),name='token_obtain_pair'),
-    path('token/refresh/',jwt_views.TokenRefreshView.as_view(),name='token_refresh'),
+    path('token/',viewsAuth.MyObtainTokenPairView.as_view(),name='token_obtain_pair'),
+    path('token/refresh/',TokenRefreshView.as_view(),name='token_refresh'),
+    path('register/', viewsAuth.RegisterView.as_view(), name='auth_register'),
     path('accomodation/',include(router.urls)),
-    path('accomodation/user_reservations/<int:user>/', views.get_user_reservations),
+    path('accomodation/user_reservations/', views.get_user_reservations),
     path('accomodation/reservation_dates/<int:room>/', views.get_reservation_dates),
 ]
