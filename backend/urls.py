@@ -19,6 +19,8 @@ from accomodationApp import views
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView
 from auth import views as viewsAuth
+from django.conf import settings
+from django.conf.urls.static import static
 
 router =routers.DefaultRouter()
 router.register('rooms',views.HotelRoomViewSet)
@@ -33,4 +35,8 @@ urlpatterns = [
     path('accomodation/',include(router.urls)),
     path('accomodation/user_reservations/', views.get_user_reservations),
     path('accomodation/reservation_dates/<int:room>/', views.get_reservation_dates),
+    path('upload/', views.ImageViewSet.as_view(), name='upload'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

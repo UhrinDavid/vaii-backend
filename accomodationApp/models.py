@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 
-
 # Create your models here.
 class HotelRoom(models.Model):
     roomNumber=models.PositiveIntegerField(unique=True,validators=[MinValueValidator(1), MaxValueValidator(9999)])
@@ -25,3 +24,8 @@ class Review(models.Model):
     userID=models.OneToOneField(User, on_delete=models.CASCADE)
     reviewText=models.CharField(max_length=1023,blank=True)
     stars=models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+
+class UploadImage(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images', blank=True, null=True)
