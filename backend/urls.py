@@ -35,7 +35,6 @@ urlpatterns = [
     path('accomodation/',include(router.urls)),
     path('accomodation/user_reservations/', views.get_user_reservations),
     path('accomodation/reservation_dates/<int:room>/', views.get_reservation_dates),
-    path('upload/', views.ImageViewSet.as_view(), name='upload'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accomodationApp.models import HotelRoom,Reservation,Review, UploadImage
+from accomodationApp.models import HotelRoom,Reservation,Review
 from django.contrib.auth.models import  User
 
 class HotelRoomSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class ReservationSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields=['first_name', 'last_name']
+        fields=['id', 'first_name', 'last_name']
 
 class ReviewSerializerList(serializers.ModelSerializer):
     userID= CustomUserSerializer()
@@ -45,8 +45,3 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields='__all__'
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UploadImage
-        fields = ('name', 'image')

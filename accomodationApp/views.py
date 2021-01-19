@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from accomodationApp.models import HotelRoom,Reservation,Review,UploadImage
-from accomodationApp.serializers import HotelRoomSerializer,ReservationSerializer,ReservationSerializerBooked,ReviewSerializer,ImageSerializer,ReviewSerializerList,ReservationSerializerList
+from accomodationApp.models import HotelRoom,Reservation,Review
+from accomodationApp.serializers import HotelRoomSerializer,ReservationSerializer,ReservationSerializerBooked,ReviewSerializer,ReviewSerializerList,ReservationSerializerList
 from rest_framework import viewsets, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -43,10 +43,11 @@ class HotelRoomViewSet(BaseModelViewSet):
     serializer_class=HotelRoomSerializer
 
     permission_action_classes = {
-                'create': [IsAdminUser],
                 'update': [IsAdminUser],
                 'destroy': [IsAdminUser],
-    }
+    } 
+
+
 
 class ReviewViewSet(BaseModelViewSet):
     queryset=Review.objects.all()
@@ -98,11 +99,3 @@ def get_reservation_dates(request,room):
     serializer=ReservationSerializerBooked(reservations,many=True)
     return Response(serializer.data)
 
-class ImageViewSet(ListAPIView):
-    queryset = UploadImage.objects.all()
-    serializer_class = ImageSerializer
-
-    def post(self, request, *args, **kwargs):
-        file = request.data['file']
-        image = UploadImage.objects.create(image=file)
-        return HttpResponse(json.dumps({'message': "Uploaded"}), status=200)
